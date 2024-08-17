@@ -1,0 +1,4 @@
+name: WhitelistPerm
+version: $version
+main: org.windy.whitelistPerm.WhitelistPerm
+api-version: '1.20'

@@ -1,0 +1,17 @@
+# 是否开启
+enable: true
+# 权限列表
+perm:
+  - island.player
+# 白名单玩家
+white-list:
+  - FSEIFHF
+# 踢出时的消息
+message: "&c空岛玩家或无权限玩家禁止进入资源服"
+#调试模式
+debug: true
+#Placeholder变量判断是否启用
+enable-placeholder: false
+#Placeholder变量，只能是返回布尔值的
+placeholder:
+  - %bskyblock_has_island%
