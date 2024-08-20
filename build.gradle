@@ -1,9 +1,11 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java'
 }
 
 group = 'org.windy'
-version = '1.2-SNAPSHOT'
+version new SimpleDateFormat("yyyy.MM.dd.HHmm").format(new Date())+"-exp-dev"
 
 repositories {
     mavenCentral()
