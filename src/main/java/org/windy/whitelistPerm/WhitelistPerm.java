@@ -101,41 +101,40 @@ public final class WhitelistPerm extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        Player player = event.getPlayer();
-        String playerName = player.getName();
-        String owner = PlaceholderAPI.setPlaceholders(player, "%iridiumSkyblock_current_island_owner%");
-        String list = PlaceholderAPI.setPlaceholders(player, "%iridiumSkyblock_current_island_members_online%");
-
-        if (debug) {
-            getLogger().info(playerName + " 发生传送事件");
-            getLogger().info(whiteList.contains(playerName)+" "+owner.equals("windy")+" "+!list.contains(playerName));
-        }
-
-
-
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(this, new Runnable() {
             @Override
             public void run() {
+                Player player = event.getPlayer();
+                String playerName = player.getName();
+                String owner = PlaceholderAPI.setPlaceholders(player, "%iridiumSkyblock_current_island_owner%");
+                String list = PlaceholderAPI.setPlaceholders(player, "%iridiumSkyblock_current_island_members_online%");
+
+                if (debug) {
+                    getLogger().info(playerName + " 发生了传送事件");
+                    getLogger().info(whiteList.contains(playerName)+" "+owner.equals("windy")+" "+!list.contains(playerName));
+                }
                 if (whiteList.contains(playerName) || owner.equals("windy") || !list.contains(playerName)) {
                     if (debug) {
                         getLogger().info(playerName + "命令取消");
                     }
                     return; // Player is whitelisted, do nothing
                 }
+                for (String command : commands) {
+                    String processedCommand = PlaceholderAPI.setPlaceholders(player, command);
+
+                    Bukkit.getScheduler().runTask(WhitelistPerm.this, new Runnable() {
+                        @Override
+                        public void run() {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), processedCommand);
+                            if (debug) {
+                                WhitelistPerm.this.getLogger().info(playerName + " 已被执行命令: " + processedCommand);
+                            }
+                        }
+                    });
+                }
                 // 在这里继续执行其他代码
             }
         }, 60L); // 60 ticks = 3 seconds
-
-
-
-
-        for (String command : commands) {
-            String processedCommand = PlaceholderAPI.setPlaceholders(player, command);
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), processedCommand);
-            if (debug) {
-                   getLogger().info(playerName + " 已被执行命令: " + processedCommand);
-            }
-        }
     }
 }
